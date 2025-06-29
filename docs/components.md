@@ -1,4 +1,4 @@
-# Smart Irrigation
+# Components
 **Per Pianta:**  
 
   → 4 cavi da Controllo: 5V, GND, A, B
