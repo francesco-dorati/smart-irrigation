@@ -27,3 +27,4 @@
 **Altro:**
 
 - [ ]  1 Pannello solare 5V 2W
+- [ ]  1 USB-Serial Adampter 
