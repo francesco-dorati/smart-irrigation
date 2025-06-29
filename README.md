@@ -6,14 +6,14 @@ This project aims to develop a **smart** and **autonomous** system for **waterin
 
 ## Key Objectives
 
-- 🌱 **Autonomous Plant Care**: Automatically water plants based on soil moisture levels without human intervention.
+- 🌱 **Autonomous Plant Care**: Automatically water plants based on **soil moisture levels** without human intervention.
 - 🔄 **Periodic Monitoring**: Measure soil humidity twice a day to check if each plant requires watering.
-- 💧 **Per-Plant Watering**: Independently control water delivery to each plant based on its specific needs.
-- 🔋 **Energy Efficient**: Operate on battery power, optimized with deep sleep cycles for long-term use.
-- ☀️ **Solar Optional**: Include the option to recharge the system via solar panel for complete autonomy.
-- 🧠 **Expandable Architecture**: Start with support for 3 plants and scale up to 6 or more with minimal changes.
+- 💧 **Per-Plant Watering**: Independently control water delivery to each plant based on its **specific needs**.
+- 🔋 **Energy Efficient**: Operate on battery power, optimized with deep sleep cycles for **long-term use**.
+- ☀️ **Solar Optional**: Include the option to recharge the system via **solar panel** for **complete autonomy**.
+- 🧠 **Expandable Architecture**: Start with support for 3 plants and scale **up to 6 or more** with minimal changes.
 - 📦 **Compact & Modular**: Designed to be simple to install and easy to maintain for home or small-scale use.
-- 📊 **Data Logging**: Record historical moisture and watering events for analysis (without requiring internet).
+- 📊 **Data Logging**: Record historical moisture and watering events for **analysis** (without requiring internet).
 
 
 ## 🚧 Project Status
