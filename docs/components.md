@@ -1,14 +1,15 @@
 # Components
 **Per Pianta:**  
 
-  → 4 cavi da Controllo: 5V, GND, A, B
+  → 5 cavi dal Main: 5V, GND, A, B, wake-up -> Cavo ETHERNET
 - [ ]  1 Sensore umidità capacitivo analogico
 - [ ]  1 Mini Pompa 5V DC
 - [ ]  1 Microcontrollore Pro Mini 3.3V / 8 MHz
  con ATmega328P
-- [ ]  1 Tubicino
 - [ ]  1 MOSFET
 - [ ]  1 MAX485 TTL
+- [ ]  1 cavo ethernet 3m
+- [ ]  1 Tubo acqua 
 
 **Control Unit**
 
