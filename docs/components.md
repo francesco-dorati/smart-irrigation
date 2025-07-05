@@ -23,6 +23,7 @@
 - [ ]  1 Controllore con WiFi [D1 mini]
 - [ ]  1 modulo connessione [MAX485 TTL] 
 - [ ]  1 Modulo microSD
+- [ ]  1 Relay Module [SRD-05VDC-SL-C]
 
 **Altro:**
 
