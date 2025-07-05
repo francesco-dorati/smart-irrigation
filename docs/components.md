@@ -5,7 +5,7 @@
 - [ ]  1 Sensore umidità capacitivo analogico (3-5V, ? W, DC) [SZHJW]
 - [ ]  1 Mini Pompa (3-5V, 0.91W max, DC)
 - [ ]  1 Microcontrollore Pro Mini 3.3V/8MHz (3.3V logiv, 5V in, ? W, DC)
-- [ ]  1 MOSFET [IRLZ44N]
+- [ ]  1 Relay Module [SRD-05VDC-SL-C]
 - [ ]  1 modulo connessione [MAX485 TTL] 
 - [ ]  1 cavo ethernet 3m
 - [ ]  1 Tubo acqua 
