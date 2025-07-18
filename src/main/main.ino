@@ -1,41 +1,11 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
+#include "RS485Server.h"
+
 const int COMM_PIN = 2;
 const int RX_PIN = 10;  // RX pin for RS485
 const int TX_PIN = 11;  // TX pin for RS485
-
-class RS485Server {
- public:
-  RS485Server(int comm, int rx, int tx) : comm(comm), serial(rx, tx) {}
-
-  void begin(long baudrate) {
-    serial.begin(baudrate);
-    pinMode(comm, OUTPUT);
-    digitalWrite(comm, LOW);
-  }
-
-  bool available() { return serial.available(); }
-
-  String receiveResponse() {
-    String command = serial.readStringUntil('\n');
-    command.trim();
-    return command;
-  }
-
-  void transmitTo(String target, String message) {
-    digitalWrite(comm, HIGH);
-    delayMicroseconds(10);
-    serial.println((target + " " + message).c_str());
-    serial.flush();
-    digitalWrite(comm, LOW);
-    Serial.println("sent: " + message);
-  }
-
- private:
-  int comm;
-  SoftwareSerial serial;
-};
 
 RS485Server rs485(COMM_PIN, RX_PIN, TX_PIN);
 
