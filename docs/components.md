@@ -4,7 +4,7 @@
   → 5 cavi dal Main: 5V, GND, A, B, wake-up -> Cavo ETHERNET
 - [ ]  1 Sensore umidità capacitivo analogico (3-5V, ? W, DC) [SZHJW]
 - [ ]  1 Mini Pompa (3-5V, 0.91W max, DC)
-- [ ]  1 Microcontrollore Pro Mini 3.3V/8MHz (3.3V logiv, 5V in, ? W, DC)
+- [ ]  1 Microcontrollore Arduino NANO (5V, ? W, DC)
 - [ ]  1 Relay Module [SRD-05VDC-SL-C]
 - [ ]  1 modulo connessione [MAX485 TTL] 
 - [ ]  1 cavo ethernet 3m
@@ -20,7 +20,7 @@
 
 **Controller:**
 
-- [ ]  1 Controllore con WiFi [D1 mini]
+- [ ]  1 Microcontrollore ESP32 (5V, ? W, DC)
 - [ ]  1 modulo connessione [MAX485 TTL] 
 - [ ]  1 Modulo microSD
 - [ ]  1 Relay Module [SRD-05VDC-SL-C]
@@ -28,4 +28,3 @@
 **Altro:**
 
 - [ ]  1 Pannello solare (5-6V, 2W)
-- [ ]  1 USB-Serial Adampter - per caricare codice su pro mini
