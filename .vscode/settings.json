@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.ejs": "html",
-        "HTTP request:response": "html",
-        "__locale": "cpp",
-        "locale": "cpp"
-    }
-}
