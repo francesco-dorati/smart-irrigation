@@ -1,45 +1,85 @@
-int sensorPin = A0;
-int pumpPin = 4;
+#include <Arduino.h>
+#include <SoftwareSerial.h>
 
-int value = 0;
-float voltage = 0;
-float percentage = 0;
+const int COMM_PIN = 2;
+const int RX_PIN = 10; // RX pin for RS485
+const int TX_PIN = 11; // TX pin for RS485
 
-void setup() {
-  Serial.begin(9600);
-  pinMode(sensorPin, INPUT);
-  pinMode(pumpPin, OUTPUT);
-  digitalWrite(pumpPin, HIGH);
+class RS485Server
+{
+public:
+    RS485Server(int comm, int rx, int tx) : comm(comm), serial(rx, tx) {}
+
+    void begin(long baudrate)
+    {
+        serial.begin(baudrate);
+        pinMode(comm, OUTPUT);
+        digitalWrite(comm, LOW);
+    }
+
+    bool available()
+    {
+        return serial.available();
+    }
+
+    String receiveResponse()
+    {
+        String command = serial.readStringUntil('\n');
+        command.trim();
+        return command;
+    }
+
+    void transmitTo(String target, String message)
+    {
+        digitalWrite(comm, HIGH);
+        delayMicroseconds(10);
+        serial.println((target + " " + message).c_str());
+        serial.flush();
+        digitalWrite(comm, LOW);
+        Serial.println("sent: " + message);
+    }
+
+private:
+    int comm;
+    SoftwareSerial serial;
+};
+
+RS485Server rs485(COMM_PIN, RX_PIN, TX_PIN);
+
+void setup()
+{
+    Serial.begin(9600);
+    rs485.begin(9600);
+    Serial.println("START\n");
 }
 
-void loop() {
-  value = analogRead(sensorPin);
-  voltage = analogToVoltage(value);
-  percentage = voltageToPercentage(voltage);
-  Serial.print("voltage: ");
-  Serial.print(voltage);
-  Serial.print(" V, percentage: ");
-  Serial.print(percentage);
-  Serial.println(" %");
+void loop()
+{
+    if (Serial.available())
+    {
+        String command = Serial.readStringUntil('\n');
+        rs485.transmitTo("*", command);
+    }
 
-  if (percentage > 50) {
-    digitalWrite(pumpPin, LOW);
-    Serial.println("PUMP ON");
-  } else {
-    digitalWrite(pumpPin, HIGH);
-    Serial.println("PUMP OFF");
-  }
-
-  delay(500); 
+    if (rs485.available())
+    {
+        String response = rs485.receiveResponse();
+        Serial.println("received: " + getBody(response) + "\n");
+    }
 }
 
-const float MAX_VOLTAGE = 5;
-float analogToVoltage(int analogValue) {
-  return (value * MAX_VOLTAGE)/1023.0;
+String getRecipient(String command)
+{
+    int spaceIndex = command.indexOf(' ');
+    if (spaceIndex == -1)
+        return "";
+    return command.substring(0, spaceIndex);
 }
 
-const float DRY_VOLTAGE = 3.03;
-const float WET_VOLTAGE = 1.08;
-float voltageToPercentage(float voltage) {
-  return 100.0 * (voltage - DRY_VOLTAGE) / (WET_VOLTAGE - DRY_VOLTAGE);
+String getBody(String command)
+{
+    int spaceIndex = command.indexOf(' ');
+    if (spaceIndex == -1)
+        return "";
+    return command.substring(spaceIndex + 1);
 }
