@@ -35,7 +35,7 @@ Perfect for balconies, gardens, or indoor setups.
 
 ## 📚 Resources
 - 🧰  Components List — [[here](docs/components.md)]
-- ⚡  Electrical Schemes — [[Main Unit](hardware/schematics/main_scheme.png) | [Plant Unit](hardware/schematics/main_scheme.png)]
+- ⚡  Electrical Schemes — [[Main Unit](hardware/schematics/main_scheme.png) | [Plant Unit](hardware/schematics/plant_scheme.png)]
     
 ## 🤝 Contributing
 
