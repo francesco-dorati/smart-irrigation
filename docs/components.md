@@ -1,7 +1,7 @@
 # Components
 **Per Pianta:**  
 
-  → 5 cavi dal Main: 5V, GND, A, B, wake-up -> Cavo ETHERNET
+  → 4 cavi dal Main: 5V, GND, A, B  -> Cavo ETHERNET
 - [ ]  1 Sensore umidità capacitivo analogico (3-5V, ? W, DC) [SZHJW]
 - [ ]  1 Mini Pompa (3-5V, 0.91W max, DC)
 - [ ]  1 Microcontrollore Arduino NANO (5V, ? W, DC)
