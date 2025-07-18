@@ -2,7 +2,8 @@
 
 ## Overview
 
-This project aims to develop a **smart** and **autonomous** system for **watering indoor or outdoor plants**. The system is designed to **monitor soil moisture levels** and **automatically water** each plant when needed, making plant care effortless and reliable.
+This project aims to develop a **smart** and **autonomous** system for **watering indoor or outdoor plants**.  
+The system is designed to **monitor soil moisture levels** and **automatically water** each plant when needed, making plant care effortless and reliable.
 
 
 ## 🌱 The Product
@@ -25,12 +26,12 @@ Perfect for balconies, gardens, or indoor setups.
 
 ## 🚧 Project Status
 
-- [x] System concept and design defined
-- [ ] Electrical scheme
-- [ ] Firmware logic implementation
-- [ ] Prototype creation
-- [ ] Test with 3 plants
-- [ ] Final housing and enclosure design
+- [x] Define system concept and design
+- [x] Electrical scheme
+- [x] Basic prototype
+- [ ] Complete prototype with 1 plant
+- [ ] Complete prototype with multiple plants
+- [ ] Final enclosure design
 
 ## 🤝 Contributing
 
