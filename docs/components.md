@@ -1,16 +1,19 @@
 # Components
-**Per Pianta:**  
+### **Per Pianta:**  
 
-  → 5 cavi dal Main: 5V, GND, A, B, wake-up -> Cavo ETHERNET
+  → 4 cavi dal Main: 5V, GND, A, B  -> Cavo ETHERNET
 - [ ]  1 Sensore umidità capacitivo analogico (3-5V, ? W, DC) [SZHJW]
 - [ ]  1 Mini Pompa (3-5V, 0.91W max, DC)
 - [ ]  1 Microcontrollore Arduino NANO (5V, ? W, DC)
 - [ ]  1 Relay Module [SRD-05VDC-SL-C]
-- [ ]  1 modulo connessione [MAX485 TTL] 
-- [ ]  1 cavo ethernet 3m
+- [ ]  1 Modulo connessione [MAX485 TTL] 
+- [ ]  1 Cavo Ethernet 3m
+- [ ]  1 Connettore Ethernet
 - [ ]  1 Tubo acqua 
 
-**Control Unit**
+---
+
+### **Control Unit:**
 
 **Power Management:**
 
@@ -21,9 +24,10 @@
 **Controller:**
 
 - [ ]  1 Microcontrollore ESP32 (5V, ? W, DC)
-- [ ]  1 modulo connessione [MAX485 TTL] 
+- [ ]  1 Modulo connessione [MAX485 TTL] 
 - [ ]  1 Modulo microSD
 - [ ]  1 Relay Module [SRD-05VDC-SL-C]
+- [ ]  1 Connettore Ethernet
 
 **Altro:**
 

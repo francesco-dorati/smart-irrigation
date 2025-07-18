@@ -33,6 +33,10 @@ Perfect for balconies, gardens, or indoor setups.
 - [ ] Complete prototype with multiple plants
 - [ ] Final enclosure design
 
+## 📚 Resources
+- 🧰  Components List — [[here](docs/components.md)]
+- ⚡  Electrical Schemes — [[Main Unit](hardware/schematics/main_scheme.png) | [Plant Unit](hardware/schematics/plant_scheme.png)]
+    
 ## 🤝 Contributing
 
 Contributions, feedback, and suggestions are welcome!  
