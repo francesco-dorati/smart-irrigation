@@ -1,4 +1,4 @@
-#include <RS485Server.h>
+#include "RS485Server.h"
 
 RS485Server::RS485Server(int comm, int rx, int tx)
     : comm(comm), serial(rx, tx) {}

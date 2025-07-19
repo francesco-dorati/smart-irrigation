@@ -1,4 +1,4 @@
-#include <Pump.h>
+#include "Pump.h"
 
 Pump::Pump(int p) : pin(p), on(false) {}
 
