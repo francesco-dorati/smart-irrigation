@@ -30,4 +30,6 @@ for each plant:
 
           
 
-
+## preditions:
+- predict in water consumption by plant, given plant info and temperature
+- 
