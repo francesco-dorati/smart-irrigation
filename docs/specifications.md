@@ -2,8 +2,8 @@
 
 ## when powered on:
 ```
-load plant list from SD
-turn plants on
+load data from SD
+turn on plants
 for each plant:
   get_humidity(plant_id)
   if humidity < min_humidity(plant_id):
@@ -17,16 +17,17 @@ for each plant:
 
 ## access points
 - USB (debug)
-  - PLANT MANAGEMENT commands:
-      - PLANT NEW <plant_id> <name>: new plant
-      - PLANT LIST: list plants
-      - PLANT REMOVE <plant_id> : remove plant
   - STATUS commands:
       - STATUS: info about memory, and for each plant list current humidity and last watered time
       - INFO: local info (without switching on plants)
-  - ACTIONS commands:
-      - WATER <plant_id> <milliliters>: water a plant
-      - CHECK <plant_id>: checks if plant needs water and if so water it 
+  - PLANT MANAGEMENT commands:
+      - PLANT LIST: list plants
+      - PLANT NEW <plant_id> <name>: new plant
+      - PLANT REMOVE <plant_id>: remove plant
+      - PLANT PING <plant_id>: pings plant
+      - PLANT CHECK <plant_id>: checks plant humidity and waters it if necessary
+      - PLANT INFO <plant_id>: prints local plant info
+
           
 
 
