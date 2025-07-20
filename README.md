@@ -34,6 +34,7 @@ Perfect for balconies, gardens, or indoor setups.
 - [ ] Final enclosure design
 
 ## 📚 Resources
+- ⚙️ Technical Details — [[here](docs/specifications.md)]
 - 🧰  Components List — [[here](docs/components.md)]
 - ⚡  Electrical Schemes — [[Main Unit](hardware/schematics/main_scheme.png) | [Plant Unit](hardware/schematics/plant_scheme.png)]
     
