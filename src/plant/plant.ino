@@ -27,15 +27,17 @@ void setup() {
   humiditySensor.begin();
   pump.begin();
 
-  led.blink(1);
+  led.blink();
+  led.blink();
   Serial.println("START");
+  delay(1000);
 }
 
 void loop() {
   // RS485 communication
   if (rs485.available()) {
-    String command =
-        rs485.receiveCommand();  // Ensure command is for this plant
+    // Read command from RS485
+    String command = rs485.receiveCommand();
     if (!command.equals("")) {
       interpretCommand(command);
     }
@@ -51,16 +53,16 @@ void loop() {
 
 void interpretCommand(String command) {
   if (command.equals("PING")) {
+    led.blink();
     rs485.transmit("PONG");
-    led.blink(1);
   } else if (command.equals("HUMIDITY")) {
     int humidity = humiditySensor.getHumidity();
-    rs485.transmit(String(humidity) + " " +
-                   String(humiditySensor.getVoltage()));
+    rs485.transmit(String(humidity));
   } else if (command.startsWith("WATER")) {
     int seconds = command.substring(6).toInt();
     if (seconds < 0) return;  // Invalid command
     pump.activate(seconds);
+    rs485.transmit("DONE");
   } else {
     Serial.println("Unknown command: \"" + command + "\"");
   }
@@ -68,8 +70,8 @@ void interpretCommand(String command) {
 
 void interpretDebug(String command) {
   if (command.equals("PING")) {
+    led.blink();
     Serial.println("PONG");
-    led.blink(1);
   } else if (command.equals("HUMIDITY")) {
     int value = humiditySensor.getValue();
     float voltage = humiditySensor.getVoltage();

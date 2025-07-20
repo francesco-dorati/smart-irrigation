@@ -9,12 +9,18 @@ class RS485Server {
   RS485Server(int comm, int rx, int tx);
   void begin(long baudrate);
   bool available();
-  String receiveResponse();
+  //String receiveResponse();
+  String receiveFrom(String target, bool avoidTimeout = false);
   void transmitTo(String target, String message);
 
  private:
-  int comm;
-  SoftwareSerial serial;
+ const unsigned long TIMEOUT = 1000;  // Timeout for receiving messages
+ int comm;
+ SoftwareSerial serial;
+
+  String getRecipient(String command);
+  String getBody(String command);
+  
 };
 
 #endif  // RS485SERVER_H

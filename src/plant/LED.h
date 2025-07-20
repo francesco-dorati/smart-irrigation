@@ -9,7 +9,7 @@ class LED {
   void begin();
   void setOn();
   void setOff();
-  void blink(int seconds);
+  void blink();
 
  private:
   int pin;

@@ -16,6 +16,7 @@ class RS485Client {
   String id;
   int comm;
   SoftwareSerial serial;
+  unsigned long TIMEOUT = 100;  // Timeout for receiving messages
 
   String getRecipient(String command);
   String getBody(String command);

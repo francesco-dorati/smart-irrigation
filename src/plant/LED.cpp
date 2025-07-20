@@ -11,8 +11,8 @@ void LED::setOn() { digitalWrite(pin, HIGH); }
 
 void LED::setOff() { digitalWrite(pin, LOW); }
 
-void LED::blink(int seconds) {
+void LED::blink() {
   setOn();
-  delay(seconds * 1000);
+  delay(500);
   setOff();
 }
