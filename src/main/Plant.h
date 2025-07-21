@@ -61,7 +61,7 @@ class Plant {
   float getHumidity();
   bool isSaucerFull();
   bool water(int seconds);
-  int getWaterNeeds(int humidity);
+  int checkWaterNeeds(float humidity);
 
  private:
   RS485Server& server;

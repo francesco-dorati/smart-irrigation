@@ -24,9 +24,8 @@ void setup() {
   rs485.begin(9600);
   tempSensor.begin();
 
-  /* remove */ plants[0] = new Plant(rs485, "0", "Test Plant",
-                                    WaterPreference::MEDITERRANEAN, 5);
-  /* remove */ //plants[1] = new Plant(rs485, "1", "Fake Plant");
+  /* remove */ plants[0] = new Plant(rs485, 0, "Test Plant",
+                                    WaterPreference::MEDITERRANEAN, 100);
   
   Serial.print("\n\nSTART\n");
   status();
@@ -44,8 +43,6 @@ void loop() {
       interpretUserCommand(command);
     }
   }
-
-
 }
 
 void interpretUserCommand(String command) {
@@ -144,6 +141,7 @@ void listPlants() {
 }
 
 void pingPlant(String id) {
+  // DEPRECATED
   Plant* plant = getPlantById(id);
   if (plant == nullptr) {
     Serial.println("Plant " + id + " not found");
@@ -157,6 +155,7 @@ void infoPlant(String id) {
 }
 
 void checkPlant(String id) {
+  // DEPRECATED
   // checks humidity level and decides whether to water
   Serial.println("\n--- CHECK ---\n");
 
@@ -222,15 +221,16 @@ void status() {
       String name = plants[i]->getName();
       String id = plants[i]->getId();
       bool status = plants[i]->loadStatus();
+
       String humidity = String((int) (plants[i]->getHumidity()*100));
-      String lastWatered = plants[i]->getLastWatered();
       String saucerFull = plants[i]->isSaucerFull() ? "FULL" : "EMPTY";
+      int waterNeeded = plants[i]->checkWaterNeeds(plants[i]->getHumidity());
 
       Serial.println("\t- [" + id + "] " + name);
       if (status) {
         Serial.println("\t\tHumidity: \t" + humidity + "%");
         Serial.println("\t\tSaucer: \t" + saucerFull);
-        Serial.println("\t\tLast watered: \t" + lastWatered);
+        Serial.println("\t\tNeeds Water: \t" + ((waterNeeded > 0) ? "YES, " + String(waterNeeded) + " %" : "NO"));
       } else {
         Serial.println("\t\tCurrently OFFLINE.");
       }

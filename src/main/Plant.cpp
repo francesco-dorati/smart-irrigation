@@ -51,7 +51,7 @@ bool Plant::isSaucerFull() {
   return saucerFull;  // Return the saucer status
 }
 
-int Plant::checkWaterNeeds(int humidity) {
+int Plant::checkWaterNeeds(float humidity) {
   loadStatus();
 
   if (saucerFull) return 0;
