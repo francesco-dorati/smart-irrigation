@@ -1,4 +1,4 @@
-# FINAL DEMO
+# Final Demo
 
 ## Main Loop:
 1. `LOAD DATA`: if memory is empty load data from SD card
@@ -13,6 +13,10 @@
 ## Memory Files:
 - `plants.csv` [plant_id, name, watering_preferences]
 - `history.csv` [time, action_performed, plant_id]
+    - `time`: date time stamp
+    - `id`: plant id or `-` for Main Unit
+    - `action`: between `STATUS`, `WATER`, `WAKEUP`, `SLEEP`, `RELAY_ON`, `RELAY_OFF`
+    - `description`: description of the action (status, uptime, etc)
 
 ## Watering Process:
 
