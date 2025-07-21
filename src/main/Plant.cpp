@@ -6,7 +6,7 @@ const WaterPreference WaterPreference::HOUSEPLANT(35, 75);
 const WaterPreference WaterPreference::VEGETABLE(45, 80);
 const WaterPreference WaterPreference::MEDITERRANEAN(40, 80);
 
-Plant::Plant(RS485Server& server, String id, String name, PlantState state,
+Plant::Plant(RS485Server& server, int id, String name, PlantState state,
              WaterPreference waterPreference, int saucerCapacity)
     : server(server),
       id(id),
@@ -16,7 +16,7 @@ Plant::Plant(RS485Server& server, String id, String name, PlantState state,
       waterPreference(waterPreference),
       saucerCapacity(saucerCapacity) {}
 
-String Plant::getId() const { return id; }
+int Plant::getId() const { return id; }
 
 String Plant::getName() const { return name; }
 

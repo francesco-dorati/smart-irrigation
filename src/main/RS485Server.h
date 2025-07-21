@@ -10,8 +10,8 @@ class RS485Server {
   void begin(long baudrate);
   bool available();
   //String receiveResponse();
-  String receiveFrom(String target, bool avoidTimeout = false);
-  void transmitTo(String target, String message);
+  String receiveFrom(int target, bool avoidTimeout = false);
+  void transmitTo(int target, String message);
 
  private:
  const unsigned long TIMEOUT = 1000;  // Timeout for receiving messages

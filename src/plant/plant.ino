@@ -6,7 +6,7 @@
 #include "RS485Client.h"
 #include "SaucerSensor.h"
 
-const String PLANT_ID = "0";  // Unique ID for this plant
+const int PLANT_ID = 0;  // Unique ID for this plant
 
 const int SENSOR_PIN = A0;
 const int LED_PIN = 2;

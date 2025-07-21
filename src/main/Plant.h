@@ -49,11 +49,11 @@ class WaterPreference {
 
 class Plant {
  public:
-  Plant(RS485Server& server, String id, String name, PlantState state,
+  Plant(RS485Server& server, int id, String name, PlantState state,
         WaterPreference waterPreference,
         int saucerCapacity);
 
-  String getId() const;
+  int getId() const;
   String getName() const;
   bool ping();
   bool loadStatus();
@@ -65,7 +65,7 @@ class Plant {
 
  private:
   RS485Server& server;
-  String id;    // Unique identifier for the plant
+  int id;    // Unique identifier for the plant
   String name;  // Name of the plant
   PlantState state;
   float humidity;

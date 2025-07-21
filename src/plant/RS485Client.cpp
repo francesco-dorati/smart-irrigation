@@ -1,6 +1,6 @@
 #include "RS485Client.h"
 
-RS485Client::RS485Client(String id, int comm, int rx, int tx)
+RS485Client::RS485Client(int id, int comm, int rx, int tx)
     : id(id), comm(comm), serial(rx, tx) {}
 
 void RS485Client::begin(long baudrate) {
@@ -39,7 +39,7 @@ String RS485Client::receiveCommand() {  // Ensure command is from this plant
 
   command.trim();
   String recipient = getRecipient(command);
-  if (recipient.equals(id) || recipient.equals("*")) {
+  if (recipient.equals(String(id)) || recipient.equals("*")) {
     command = getBody(command);
   } else {
     command = "";  // Not for this target
@@ -53,7 +53,7 @@ void RS485Client::transmit(String message) {
   digitalWrite(comm, HIGH);
   delayMicroseconds(100);
 
-  serial.println((id + " " + message).c_str());
+  serial.println((String(id) + " " + message).c_str());
   serial.flush();
   delayMicroseconds(100);
 

@@ -6,14 +6,14 @@
 
 class RS485Client {
  public:
-  RS485Client(String id, int comm, int rx, int tx);
+  RS485Client(int id, int comm, int rx, int tx);
   void begin(long baudrate);
   bool available();
   String receiveCommand();
   void transmit(String message);
 
  private:
-  String id;
+  int id;
   int comm;
   SoftwareSerial serial;
   unsigned long TIMEOUT = 100;  // Timeout for receiving messages

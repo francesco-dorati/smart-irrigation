@@ -27,7 +27,7 @@ bool RS485Server::available() {
   return command;
 }*/
 
-String RS485Server::receiveFrom(String target, bool avoidTimeout = false) {
+String RS485Server::receiveFrom(int target, bool avoidTimeout = false) {
   String response = "";
   unsigned long startTime = millis();
   bool timeout = true;
@@ -55,7 +55,7 @@ String RS485Server::receiveFrom(String target, bool avoidTimeout = false) {
   // Check if the response is for the target
   response.trim();
   String recipient = getRecipient(response);
-  if (recipient.equals(target) || recipient.equals("*")) {
+  if (recipient.equals(String(target)) || recipient.equals("*")) {
     response = getBody(response);
   } else {
     Serial.println("ERROR: Received message not for this target: " + recipient);
@@ -65,12 +65,12 @@ String RS485Server::receiveFrom(String target, bool avoidTimeout = false) {
   return response;  // Convert to uppercase for consistency
 }
 
-void RS485Server::transmitTo(String target, String message) {
+void RS485Server::transmitTo(int target, String message) {
   delay(200);
   digitalWrite(comm, HIGH);
   delayMicroseconds(100);
 
-  serial.println((target + " " + message).c_str());
+  serial.println((String(target) + " " + message).c_str());
   serial.flush();
   delayMicroseconds(100);
 
