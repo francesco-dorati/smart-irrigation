@@ -1,21 +1,18 @@
 # FINAL DEMO
 
 ## Main Loop:
-```
-load data from SD
-turn on plants
-for each plant:
-  get_humidity(plant_id)
-  if humidity < min_humidity(plant_id):
-      water_plant(plant_id, humidity)
-  save history to SD
-```
-when plant is below minimum -> water until optimal humidity
-water and set time where to check again
+1. `LOAD DATA`: if memory is empty load data from SD card
+2. `TURN ON PLANTS`: turn the main realy on
+3. for each plant:
+    1. `STATUS REQUEST`: request plant status
+    2. `WATERING DECISION`: decide if and how much water the plant
+    3. `LOG`: log activities in `history.csv`
+4. `WAKEUP DECISION`: decide when to wake up next
+5. `DEEP SLEEP`: deep sleep until RTC wakeup call 
 
-## memory files:
-- plants.csv [plant_id, name, watering_preferences]
-- history.csv [time, action_performed, plant_id]
+## Memory Files:
+- `plants.csv` [plant_id, name, watering_preferences]
+- `history.csv` [time, action_performed, plant_id]
 
 ## Watering Process:
 
