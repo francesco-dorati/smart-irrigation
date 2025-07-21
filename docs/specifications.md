@@ -10,6 +10,8 @@ for each plant:
       water_plant(plant_id, humidity)
   save history to SD
 ```
+when plant is below minimum -> water until optimal humidity
+water and set time where to check again
 
 ## memory files:
 - plants.csv [plant_id, name, watering_preferences]
