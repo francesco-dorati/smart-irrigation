@@ -1,25 +1,31 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
 
+#include "DHT.h"
+
 #include "Plant.h"
 #include "RS485Server.h"
 
-const int COMM_PIN = 2;
+
+const int COMM_PIN = 3;
+const int DHT_PIN = 4;  // Pin for DHT sensor
 const int RX_PIN = 10;  // RX pin for RS485
 const int TX_PIN = 11;  // TX pin for RS485
 
 const int MAX_PLANTS = 8;  // Maximum number of plants
 
+
+DHT tempSensor(DHT_PIN, DHT11);
 RS485Server rs485(COMM_PIN, RX_PIN, TX_PIN);
 Plant* plants[MAX_PLANTS] = {nullptr};
 
 void setup() {
   Serial.begin(9600);
   rs485.begin(9600);
+  tempSensor.begin();
 
-  /* remove */ plants[0] = new Plant(rs485, "0", "Test Plant", "N/A", 
-                                    WaterPreference::MEDIUM_NEED,
-                                    SunlightExposure::HALF_SUN);
+  /* remove */ plants[0] = new Plant(rs485, "0", "Test Plant",
+                                    WaterPreference::MEDITERRANEAN, 5);
   /* remove */ //plants[1] = new Plant(rs485, "1", "Fake Plant");
   
   Serial.print("\n\nSTART\n");
@@ -56,7 +62,7 @@ void interpretUserCommand(String command) {
     } else if (a1.equals("LIST") || a1.equals("L")) {  // PLANT LIST
       listPlants();
 
-    } else if (a1.equals("PING") || a1.equals("P")) {  // PLANT PING <id>
+    } else if (a1.equals("PING") || a1.equals("P")) {  // PLANT PING <id> 
       String plantId = getArg(command, 2);
       pingPlant(plantId);
 
@@ -113,6 +119,16 @@ Plant* getPlantById(String id) {
 }
 
 // SERIAL DEBUG COMMANDS
+String environmentDataString() {
+  float humidity = tempSensor.readHumidity();
+  float temperature = tempSensor.readTemperature();
+
+  if (isnan(humidity) || isnan(temperature)) {
+    return "Failed to read from DHT sensor!";
+  }
+
+  return "Temperature: " + String((int) temperature) + "°C\nAir Humidity: " + String((int) humidity) + "%";
+}
 
 bool newPlant(String id, String name) {}
 
@@ -152,19 +168,22 @@ void checkPlant(String id) {
   Serial.println("\nChecking " + plant->getName() + "...");
 
   // PING
-  bool status = plant->ping();
+  bool status = plant->loadStatus();
   if (!status) {
     Serial.println(plant->getName() + " is OFFLINE.");
     return;
   }
 
   // HUMIDITY
-  int humidity = plant->getHumidity();
+  int humidity = plant->getHumidity()*100;
+  bool saucerFull = plant->isSaucerFull();
   Serial.println("\nHumidity: " + String(humidity) + "%");
+  Serial.println("Saucer full: " + String(saucerFull ? "YES" : "NO"));
+
   // WATER NEEDS
   int waterNeeds = plant->getWaterNeeds(humidity);
   if (waterNeeds > 0) {
-    Serial.println("\nPlant needs watering! Humidity is");
+    Serial.println("\nPlant needs watering!");
     char confirmation;
     do {
       Serial.print("Do you want me to water it? (y/n)  ");
@@ -195,21 +214,25 @@ void checkPlant(String id) {
 
 void status() {
   Serial.println("\n--- STATUS ---\n");
+
+  Serial.println(environmentDataString()+"\n");
   Serial.println("YOUR PLANTS:");
   for (int i = 0; i < MAX_PLANTS; i++) {
     if (plants[i] != nullptr) {
       String name = plants[i]->getName();
       String id = plants[i]->getId();
-      bool status = plants[i]->ping();
-      String humidity = String(plants[i]->getHumidity());
+      bool status = plants[i]->loadStatus();
+      String humidity = String((int) (plants[i]->getHumidity()*100));
       String lastWatered = plants[i]->getLastWatered();
+      String saucerFull = plants[i]->isSaucerFull() ? "FULL" : "EMPTY";
 
-      Serial.println("\t- " + name);
-      Serial.println("\t\tID: \t\t" + id);
-      Serial.println("\t\tStatus: \t" + String(status ? "ONLINE" : "OFFLINE"));
+      Serial.println("\t- [" + id + "] " + name);
       if (status) {
         Serial.println("\t\tHumidity: \t" + humidity + "%");
+        Serial.println("\t\tSaucer: \t" + saucerFull);
         Serial.println("\t\tLast watered: \t" + lastWatered);
+      } else {
+        Serial.println("\t\tCurrently OFFLINE.");
       }
     }
   }

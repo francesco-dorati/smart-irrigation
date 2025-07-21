@@ -4,8 +4,8 @@ HumiditySensor::HumiditySensor(int p) : pin(p) {}
 
 void HumiditySensor::begin() { pinMode(pin, INPUT); }
 
-int HumiditySensor::getHumidity() {
-  return 100.0 * (getVoltage() - DRY_VOLTAGE) / (WET_VOLTAGE - DRY_VOLTAGE);
+float HumiditySensor::getHumidity() {
+  return (getVoltage() - DRY_VOLTAGE) / (WET_VOLTAGE - DRY_VOLTAGE);
 }
 
 float HumiditySensor::getVoltage() {

@@ -5,36 +5,76 @@
 
 #include "RS485Server.h"
 
-enum WaterPreference {
-  DRY = 0,  // Dry soil
-  LOW_NEED = 15,
-  MEDIUM_NEED = 30,
-  HIGH_NEED = 50
+/*
+(target humidity, water humidity, water needs)
+Water Requirements (ml per week baseline)
+    Small plants (4-inch pot): 50-150ml depending on type
+    Medium plants (6-8 inch pot): 200-500ml
+    Large plants (10+ inch pot): 500-1200ml
+
+Soil Moisture Levels
+    Succulents/Cacti: Water when soil drops to 10-15%, target 70-80% after
+watering Tropical Plants: Maintain 40-60%, water when drops to 35% Mediterranean
+Plants: Water when drops to 20-25%, allow moderate drying Ferns/Moisture-loving:
+Maintain 50-70%, never below 40%
+
+Advanced Adjustments
+    Seasonal Factor: Reduce watering by 30-50% during dormant months
+    Environmental Factor: Increase by 20-40% during hot, dry periods
+    Growth Stage Factor: Increase by 25% during active growing season dv
+Environmental Thresholds
+    Temperature: Monitor 15-30°C range, increase watering frequency above 25°C
+    Humidity: Below 40% increases water demand significantly
+    Light Intensity: Bright light (>2000 lux) increases transpiration rates
+
+*/
+
+enum PlantState { ABSORBING, WATERING };
+class WaterPreference {
+ public:
+  int minHumidity;
+  int optimalHumidity;
+
+  WaterPreference(int minHumidity, int optimalHumidity)
+      : minHumidity(minHumidity), optimalHumidity(optimalHumidity) {}
+
+  static const WaterPreference SUCCULENT;
+  static const WaterPreference FERN;
+  static const WaterPreference HOUSEPLANT;
+  static const WaterPreference MEDITERRANEAN;
+  static const WaterPreference VEGETABLE;
 };
 
-enum SunlightExposure { INDOOR, NO_SUN, HALF_SUN, FULL_SUN };
+// enum SunlightExposure { INDOOR, NO_SUN, HALF_SUN, FULL_SUN };
 
 class Plant {
  public:
-  Plant(RS485Server& server, String id, String name, String lastWatered,
-        WaterPreference waterPreference, SunlightExposure exposure);
+  Plant(RS485Server& server, String id, String name, PlantState state,
+        WaterPreference waterPreference,
+        int saucerCapacity);
 
   String getId() const;
   String getName() const;
   bool ping();
-  int getHumidity();
+  bool loadStatus();
+
+  float getHumidity();
+  bool isSaucerFull();
   bool water(int seconds);
-  String getLastWatered();
   int getWaterNeeds(int humidity);
 
  private:
   RS485Server& server;
   String id;    // Unique identifier for the plant
   String name;  // Name of the plant
-  String lastWatered;
+  PlantState state;
+  float humidity;
+  bool saucerFull;
+  int saucerCapacity;  
+
   WaterPreference waterPreference;
   SunlightExposure exposure;
-  int potLiters;
+  // int potLiters;
   // also temperature (get from outside!!!!!!!)
   // max water per watering
   // Water Need (ml) = Base Water × Sunlight Factor × (Target Humidity - Current

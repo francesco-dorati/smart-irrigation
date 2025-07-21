@@ -38,6 +38,7 @@ String RS485Server::receiveFrom(String target, bool avoidTimeout = false) {
       if (c == '\n' || c == '\r') {
         if (response.length() > 0) {
           timeout = false;
+          //Serial.println("Received: " + response);
           break; // End of message
         }
       } else {
@@ -60,7 +61,7 @@ String RS485Server::receiveFrom(String target, bool avoidTimeout = false) {
     Serial.println("ERROR: Received message not for this target: " + recipient);
     response = "";  // Not for this target
   }
-  
+  response.trim();
   return response;  // Convert to uppercase for consistency
 }
 

@@ -1,0 +1,93 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "b8df42c0-6d08-4188-b450-2021a74d263c")
+	(paper "A4")
+	(title_block
+		(title "Main Unit Electrical Scheme")
+		(date "2025-07-21")
+	)
+	(lib_symbols)
+	(sheet
+		(at 31.75 85.09)
+		(size 57.15 36.83)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "314347d3-56f4-45a4-acd3-c1b79e2b4094")
+		(property "Sheetname" "Plant Unit"
+			(at 31.75 84.3784 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "plant_unit.kicad_sch"
+			(at 31.75 122.5046 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "SmartIrrigation"
+				(path "/b8df42c0-6d08-4188-b450-2021a74d263c"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 31.75 27.94)
+		(size 66.04 39.37)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "a56c46ab-4c8b-4f57-809b-d94affe04ba7")
+		(property "Sheetname" "Main Unit"
+			(at 31.75 27.2284 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "main_unit.kicad_sch"
+			(at 31.75 67.8946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "SmartIrrigation"
+				(path "/b8df42c0-6d08-4188-b450-2021a74d263c"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

@@ -7,7 +7,7 @@ class HumiditySensor {
  public:
   HumiditySensor(int p);
   void begin();
-  int getHumidity();
+  float getHumidity();
   float getVoltage();
   int getValue();
 

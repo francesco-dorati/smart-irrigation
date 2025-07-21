@@ -1,0 +1,12 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "1fbb681b-0901-4792-bd66-3db0073fd3ce")
+	(paper "A4")
+	(title_block
+		(title "Main Unit Electrical Scheme")
+		(date "2025-07-21")
+	)
+	(lib_symbols)
+)
