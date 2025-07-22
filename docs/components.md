@@ -1,4 +1,5 @@
 # Components
+TODO: Update the realy with mosfet
 ### **Per Pianta:**  
 
   → 4 cavi dal Main: 5V, GND, A, B  -> Cavo ETHERNET
