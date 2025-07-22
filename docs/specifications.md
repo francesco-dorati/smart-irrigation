@@ -11,8 +11,12 @@
 5. `DEEP SLEEP`: deep sleep until RTC wakeup call 
 
 ## Memory Files:
-- `plants.csv` [plant_id, name, watering_preferences]
-- `history.csv` [time, action_performed, plant_id]
+- `plants.csv`
+    - `id`: id of the plant
+    - `name`: name of the plant
+    - `type`: type of plant
+    - `saucerCapacity`: capacity of the saucer    
+- `history.csv`
     - `time`: date time stamp
     - `id`: plant id or `-` for Main Unit
     - `action`: between `STATUS`, `WATER`, `WAKEUP`, `SLEEP`, `RELAY_ON`, `RELAY_OFF`
@@ -51,25 +55,26 @@ The watering process proceeds gradually by filling the saucer by a specific amou
        
 ## Interfaces
 - CLI -> Main Unit 
-  - `STATUS`: info about memory, and for each plant list current humidity and last watered time
   - `INFO`: local info (without switching on plants)
+  - `STATUS`: info about memory, and for each plant list current humidity and last watered time
   - `PLANT LIST`: list plants
-  - `PLANT NEW <plant_id> <name>`: new plant
-  - `PLANT REMOVE <plant_id>`: remove plant
-  - `PLANT PING <plant_id>`: pings plant
-  - `PLANT CHECK <plant_id>`: checks plant humidity and waters it if necessary
-  - `PLANT INFO <plant_id>`: prints local plant info
+  - `PLANT NEW`: new plant
+  - `PLANT REMOVE`: remove plant
+  - `PLANT INFO <id>`: prints local plant info
+  - `PLANT STATUS <id>`: pings plant
+  - `PLANT WATER <id>`: checks if plant needs water and if so waters it
+    
 - Main Unit -> Plant Unit
   - Status reading:  
       `STATUS` -> `<ID> <humidity> <saucerEmpty>`
   - Watering command:  
     `WATER <ml>` -> `<ID> DONE`
+  - Humidity calibration  
+    `HUMIDITY_CALIBRATION` -> `<ID> <sensor_voltage> <sensor_value>` 
   - Saucer capacity calibration:  
       `CAPACITY_CALIBRATION` -> `<ID> [OK/KO]`
     - Start calibration: `START`
-    - Stop calibration: `STOP` -> `<ID> <ml>`
-
-          
+    - Stop calibration: `STOP` -> `<ID> <ml>`        
 
 ## Preditions:
 - predict water consumption by plant, given plant info and temperature
