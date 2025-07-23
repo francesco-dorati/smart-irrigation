@@ -67,9 +67,9 @@ void interpretUserCommand(String command) {
       String plantId = getArg(command, 2);
       infoPlant(plantId);
 
-    } else if (a1.equals("CHECK") || a1.equals("C")) {  // PLANT CHECK <id>
+    } else if (a1.equals("WATER") || a1.equals("W")) {  // PLANT WATER <id>
       String plantId = getArg(command, 2);
-      checkPlant(plantId);
+      waterPlant(plantId);
 
     } else {
       help();
@@ -154,60 +154,7 @@ void infoPlant(String id) {
   // local info (humidity preferences, etc.)
 }
 
-void checkPlant(String id) {
-  // DEPRECATED
-  // checks humidity level and decides whether to water
-  Serial.println("\n--- CHECK ---\n");
-
-  Plant* plant = getPlantById(id);
-  if (plant == nullptr) {
-    Serial.println("Plant " + id + " not found");
-    return;
-  }
-  Serial.println("\nChecking " + plant->getName() + "...");
-
-  // PING
-  bool status = plant->loadStatus();
-  if (!status) {
-    Serial.println(plant->getName() + " is OFFLINE.");
-    return;
-  }
-
-  // HUMIDITY
-  int humidity = plant->getHumidity()*100;
-  bool saucerFull = plant->isSaucerFull();
-  Serial.println("\nHumidity: " + String(humidity) + "%");
-  Serial.println("Saucer full: " + String(saucerFull ? "YES" : "NO"));
-
-  // WATER NEEDS
-  int waterNeeds = plant->getWaterNeeds(humidity);
-  if (waterNeeds > 0) {
-    Serial.println("\nPlant needs watering!");
-    char confirmation;
-    do {
-      Serial.print("Do you want me to water it? (y/n)  ");
-      while (!Serial.available()) {}
-      confirmation = Serial.read();
-      confirmation = tolower(confirmation);
-    } while (confirmation != 'y' && confirmation != 'n');
-
-    if (confirmation == 'y') {
-      Serial.println("Watering " + plant->getName() + " for " + String(waterNeeds) + " seconds... ");
-      plant->water(waterNeeds);
-      Serial.println("Done watering!");
-    } else {
-      Serial.println("\nOkay, not watering.");
-    }
-
-  } else {
-    Serial.println("\nNo need to water.");
-    // LAST WATERED
-    String lastWatered = plant->getLastWatered();
-    Serial.println("\nLast watered: " + lastWatered);
-  }
-
-  delay(800);  
-  Serial.println("\n--- END OF CHECK ---\n");
+void waterPlant(String id) {
 
 }
 
