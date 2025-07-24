@@ -52,8 +52,6 @@ bool Plant::isSaucerFull() {
 }
 
 int Plant::checkWaterNeeds(float humidity) {
-  loadStatus();
-
   if (saucerFull) return 0;
   if (state == ABSORBING) {
     if (humidity <= waterPreference.minHumidity) {
@@ -82,11 +80,6 @@ bool Plant::water(int seconds) {
   server.transmitTo(id, "WATER " + String(seconds));
   String response =
       server.receiveFrom(id, true);  // Clear any previous messages
-  if (!response.equals("DONE")) {
-    Serial.println("Failed to water " + name + ": " + response);
-  } else {
-    lastWatered = "N/A";  // REPLACE get from RTC clock
-  }
   return response.equals("DONE");
 }
 

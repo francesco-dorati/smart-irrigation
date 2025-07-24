@@ -67,18 +67,13 @@ class Plant {
   RS485Server& server;
   int id;    // Unique identifier for the plant
   String name;  // Name of the plant
+  int saucerCapacity;
+
   PlantState state;
   float humidity;
   bool saucerFull;
-  int saucerCapacity;  
 
   WaterPreference waterPreference;
-  SunlightExposure exposure;
-  // int potLiters;
-  // also temperature (get from outside!!!!!!!)
-  // max water per watering
-  // Water Need (ml) = Base Water × Sunlight Factor × (Target Humidity - Current
-  // Humidity) × Pot Size Factor
 };
 
 #endif  // PLANT_H

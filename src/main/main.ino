@@ -59,9 +59,9 @@ void interpretUserCommand(String command) {
     } else if (a1.equals("LIST") || a1.equals("L")) {  // PLANT LIST
       listPlants();
 
-    } else if (a1.equals("PING") || a1.equals("P")) {  // PLANT PING <id> 
+    } else if (a1.equals("STATUS") || a1.equals("STATUS")) {  // PLANT STATUS <id> 
       String plantId = getArg(command, 2);
-      pingPlant(plantId);
+      statusPlant(plantId);
 
     } else if (a1.equals("INFO") || a1.equals("I")) {  // PLANT INFO <id>
       String plantId = getArg(command, 2);
@@ -127,7 +127,24 @@ String environmentDataString() {
   return "Temperature: " + String((int) temperature) + "°C\nAir Humidity: " + String((int) humidity) + "%";
 }
 
-bool newPlant(String id, String name) {}
+String plantStatusString(Plant* plant) {
+      bool status = plants[i]->loadStatus();
+
+      String humidity = String((int) (plants[i]->getHumidity()*100));
+      String saucerFull = plants[i]->isSaucerFull() ? "FULL" : "EMPTY";
+      int waterNeeded = plants[i]->checkWaterNeeds(plants[i]->getHumidity());
+
+      Serial.println("\t- [" + plants[i]->getId() + "] " + plants[i]->getName());
+      if (status) {
+        Serial.println("\t\tHumidity: \t" + humidity + "%");
+        Serial.println("\t\tSaucer: \t" + saucerFull);
+        Serial.println("\t\tNeeds Water: \t" + ((waterNeeded > 0) ? "YES, " + String(waterNeeded) + " %" : "NO"));
+      } else {
+        Serial.println("\t\tCurrently OFFLINE.");
+      }
+}
+
+bool newPlant() {}
 
 void listPlants() {
   Serial.println("\nYOUR PLANTS:");
@@ -140,14 +157,14 @@ void listPlants() {
   }
 }
 
-void pingPlant(String id) {
-  // DEPRECATED
+void statusPlant(String id) {
   Plant* plant = getPlantById(id);
   if (plant == nullptr) {
     Serial.println("Plant " + id + " not found");
     return;
   }
-  Serial.println(plant->getName() + " is " + (plant->ping() ? "working correctly!" : "OFFLINE"));
+  String statusString = plantStatusString(plant);
+  Serial.println(statusString);
 }
 
 void infoPlant(String id) {
@@ -155,7 +172,18 @@ void infoPlant(String id) {
 }
 
 void waterPlant(String id) {
-
+  Plant* plant = getPlantById(id);
+  if (plant == nullptr) {
+    Serial.println("Plant " + id + " not found");
+    return;
+  }
+  Serial.println("Watering " + plant->getName() + "...");
+  bool ok = plant->water(5);
+  if (ok) {
+    Serial.println("Watering completed successfully");
+  } else {
+    Serial.println("Failed to water " + plant->getName());
+  }
 }
 
 void status() {
@@ -165,22 +193,8 @@ void status() {
   Serial.println("YOUR PLANTS:");
   for (int i = 0; i < MAX_PLANTS; i++) {
     if (plants[i] != nullptr) {
-      String name = plants[i]->getName();
-      String id = plants[i]->getId();
-      bool status = plants[i]->loadStatus();
-
-      String humidity = String((int) (plants[i]->getHumidity()*100));
-      String saucerFull = plants[i]->isSaucerFull() ? "FULL" : "EMPTY";
-      int waterNeeded = plants[i]->checkWaterNeeds(plants[i]->getHumidity());
-
-      Serial.println("\t- [" + id + "] " + name);
-      if (status) {
-        Serial.println("\t\tHumidity: \t" + humidity + "%");
-        Serial.println("\t\tSaucer: \t" + saucerFull);
-        Serial.println("\t\tNeeds Water: \t" + ((waterNeeded > 0) ? "YES, " + String(waterNeeded) + " %" : "NO"));
-      } else {
-        Serial.println("\t\tCurrently OFFLINE.");
-      }
+      String statusString = plantStatusString(plants[i]);
+      Serial.println(statusString);
     }
   }
 }
