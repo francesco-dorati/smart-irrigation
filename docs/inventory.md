@@ -24,10 +24,15 @@
 ### Order 3 [22/07/2025]
 - 10x Screw Terminal 2-pin
 - 10x Screw Terminal 3-pin
-- 10x MOSFET IRLZ44N
+- 10x N MOSFET IRLZ44N
 - 50x Diode 1N4007
 - 300x Resistors (various)
 - **subtotal: 12€**
   
+### Order 4 [29/07/2025]
+- 50x NPN MOSFET 2N2222
+- 10x P MOSFET IRF4905
+- **subtotal: 14€**
+
 ---
-### Total Euro: 70€
+### Total Euro: 84€
