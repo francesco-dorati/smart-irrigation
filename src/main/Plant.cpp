@@ -12,7 +12,6 @@ Plant::Plant(RS485Server& server, int id, String name, PlantState state,
       id(id),
       name(name),
       state(state),
-      lastWatered(lastWatered),
       waterPreference(waterPreference),
       saucerCapacity(saucerCapacity) {}
 
@@ -71,7 +70,7 @@ int Plant::checkWaterNeeds(float humidity) {
 
 bool Plant::water(int seconds) {
   loadStatus();
-  if (saucerFull) {
+  if (isSaucerFull()) {
     Serial.println("Saucer is full, cannot water.");
     return false;  // Cannot water if saucer is full
   }

@@ -1,12 +1,20 @@
 #include "RS485Server.h"
 
-RS485Server::RS485Server(int comm, int rx, int tx)
-    : comm(comm), serial(rx, tx) {}
+RS485Server::RS485Server(int comm, int rx, int tx, long baudrate)
+    : comm(comm), rx(rx), tx(tx), baudrate(baudrate) {}
 
-void RS485Server::begin(long baudrate) {
-  serial.begin(baudrate);
+void RS485Server::start() {
+  Serial1.begin(baudrate, SERIAL_8N1, rx, tx);
   pinMode(comm, OUTPUT);
   digitalWrite(comm, LOW);
+}
+
+void RS485Server::stop() {
+  Serial1.end();
+  pinMode(comm, INPUT);
+  digitalWrite(comm, LOW);
+  pinMode(rx, INPUT);
+  pinMode(tx, INPUT);
 }
 
 /*
@@ -22,20 +30,21 @@ bool RS485Server::available() {
 }
 */
 /*String RS485Server::receiveResponse() {
-  String command = serial.readStringUntil('\n');
+  String command = Serial1.readStringUntil('\n');
   command.trim();
   return command;
 }*/
 
-String RS485Server::receiveFrom(int target, bool avoidTimeout = false) {
+String RS485Server::receiveFrom(int target, bool longTimeout) {
   String response = "";
   unsigned long startTime = millis();
   bool timeout = true;
 
-  while (millis() - startTime < TIMEOUT || avoidTimeout) {
-    if (serial.available()) {
-      char c = serial.read();
-      if (c == '\n' || c == '\r') {
+  int timeoutDuration = longTimeout ? 30*TIMEOUT : TIMEOUT; // Adjust timeout duration based on longTimeout flag
+  while (millis() - startTime < timeoutDuration) {
+    if (Serial1.available()) {
+      char c = Serial1.read();
+      if (c == '\n' || c == '\r' || c == '\0') {
         if (response.length() > 0) {
           timeout = false;
           //Serial.println("Received: " + response);
@@ -70,8 +79,8 @@ void RS485Server::transmitTo(int target, String message) {
   digitalWrite(comm, HIGH);
   delayMicroseconds(100);
 
-  serial.println((String(target) + " " + message).c_str());
-  serial.flush();
+  Serial1.println((String(target) + " " + message).c_str());
+  Serial1.flush();
   delayMicroseconds(100);
 
   digitalWrite(comm, LOW);

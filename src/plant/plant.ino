@@ -14,8 +14,8 @@ const int COMM_PIN = 3;  // LOW: listening, HIGH: sending
 const int PUMP_PIN = 4;  // LOW: ON, HIGH: OFF
 const int SAUCER_POWER_PIN = 5; // OUTPUT LOW: POWER OFF, HIGH: POWER ON
 const int SAUCER_READING_PIN = 6; // INPUT LOW: EMPTY, HIGH: FULL
-const int RX_PIN = 10;   // RX pin for RS485
-const int TX_PIN = 11;   // TX pin for RS485
+const int RX_PIN = 11;   // RX pin for RS485
+const int TX_PIN = 10;   // TX pin for RS485
 
 RS485Client rs485(PLANT_ID, COMM_PIN, RX_PIN, TX_PIN);
 LED led(LED_PIN);
@@ -62,14 +62,6 @@ void interpretCommand(String command) {
     led.blink();
     rs485.transmit("PONG");
 
-  } else if (command.equals("HUMIDITY")) {
-    float humidity = humiditySensor.getHumidity();
-    rs485.transmit(String(humidity));
-
-  } else if (command.equals("FULL")) {
-    bool full = saucerSensor.isFull();
-    rs485.transmit((full ? "1" : "0")); // 1 if full, 0 if not
-
   } else if (command.startsWith("WATER")) {
     int seconds = command.substring(6).toInt();
     if (seconds < 0) return;  // Invalid command
@@ -101,6 +93,7 @@ void interpretDebug(String command) {
     int seconds = command.substring(6).toInt();
     if (seconds < 0) return;  // Invalid command
     pump.activate(seconds);
+    Serial.println("Watering DONE.");
   } else {
     Serial.println("Unknown command: " + command);
   }

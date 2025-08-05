@@ -1,23 +1,36 @@
 #!/bin/bash
 
-FQBN="arduino:avr:nano:cpu=atmega328old"
-PORT="/dev/cu.usbserial-140"
-BAUDRATE=9600
+PORT="/dev/cu.usbserial-10"
+FQBN="esp32:esp32:esp32doit-devkit-v1"
 SKETCH_DIR="$(pwd)"
+BUILD_DIR="/tmp/build"
+BAUDRATE=115200
 
-# check if arduino-cli is installed
 if ! command -v arduino-cli &> /dev/null; then
-  echo "Error: arduino-cli is not installed or not in PATH."
+  echo "arduino-cli non installato."
   exit 1
 fi
 
-echo "Compiling sketch in $SKETCH_DIR..."
-arduino-cli compile --fqbn "$FQBN" "$SKETCH_DIR" || { echo "Compile failed!"; exit 2; }
+if ! command -v esptool.py &> /dev/null; then
+  echo "esptool.py non installato. Installa con 'pip install esptool'"
+  exit 2
+fi
 
-echo ""
-echo "Uploading to $PORT..."
-arduino-cli upload -p "$PORT" --fqbn "$FQBN" "$SKETCH_DIR" || { echo "Upload failed!"; exit 3; }
+echo "Compilazione sketch..."
+arduino-cli compile --fqbn "$FQBN" --output-dir "$BUILD_DIR" "$SKETCH_DIR" || { echo "Compile fallito!"; exit 3; }
 
-echo ""
-echo "Opening serial monitor at $BAUDRATE baud. Press Ctrl+C to exit."
+BIN_PATH=$(find "$BUILD_DIR" -type f -name "*.merged.bin" -print0 | xargs -0 ls -1 -t | head -n 1)
+
+if [ ! -f "$BIN_PATH" ]; then
+  echo "File .merged.bin non trovato."
+  exit 4
+fi
+
+echo "File .merged.bin trovato: $BIN_PATH"
+
+echo "Flash con esptool.py a offset 0x0..."
+echo "Se fallisce, tieni premuto BOOT e premi RESET."
+esptool --chip esp32 --port "$PORT" --baud 115200 write-flash 0x0 "$BIN_PATH" || { echo "Flash fallito!"; exit 5; }
+
+echo "Flash completato! Apro monitor seriale..."
 arduino-cli monitor -p "$PORT" -c baudrate="$BAUDRATE"

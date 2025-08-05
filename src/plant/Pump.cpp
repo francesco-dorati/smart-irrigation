@@ -4,16 +4,16 @@ Pump::Pump(int p) : pin(p), on(false) {}
 
 void Pump::begin() {
   pinMode(pin, OUTPUT);
-  digitalWrite(pin, HIGH);  // Start with pump OFF
+  digitalWrite(pin, LOW);  // Start with pump OFF
 }
 
 void Pump::setOn() {
-  digitalWrite(pin, LOW);  // Turn pump ON
+  digitalWrite(pin, HIGH);  // Turn pump ON
   on = true;
 }
 
 void Pump::setOff() {
-  digitalWrite(pin, HIGH);  // Turn pump OFF
+  digitalWrite(pin, LOW);  // Turn pump OFF
   on = false;
 }
 
