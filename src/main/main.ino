@@ -1,34 +1,61 @@
 #include <Arduino.h>
 
 #include "Controller.h"
+#include "WiFiManager.h"
+
+#include <ArduinoOTA.h>
 
 
 Controller controller;
+WiFiManager wifi("iPhone di Francesco", "grinder420");
 
 void setup() {
   Serial.begin(115200);
   controller.init();
+  
   delay(2000);
-  Serial.print("\n\nSTART\n");
+  
+  wifi.begin();
+
+  delay(1000);
+
+  ArduinoOTA.setHostname("smart-irrigation"); // Optional
+  ArduinoOTA.begin();
+
+  wifi.println("\n\n\n--- SMART IRRIGATION ---\n");
   status();
   help();
   prompt();
 }
 
 void loop() {
+  ArduinoOTA.handle();
+
   // Serial command
   if (Serial.available()) {
-    String command = Serial.readStringUntil('\n');
-    command.trim();
-    command.toUpperCase(); 
+    String command = readCommand();
+    if (!command.equals("")) {
+      interpretUserCommand(command);
+    }
+  }
+
+  if (wifi.available()) {
+    String command = wifi.getCommand();
     if (!command.equals("")) {
       interpretUserCommand(command);
     }
   }
 }
 
+String readCommand() {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+    command.toUpperCase(); 
+    return command;
+}
+
 void interpretUserCommand(String command) {
-  Serial.println();
+  wifi.println("");
   String a0 = getArg(command, 0);
   if (a0.equals("PLANT") || a0.equals("P")) {
 
@@ -66,12 +93,20 @@ void interpretUserCommand(String command) {
     return;
 
   } else if (a0.equals("ON") || a0.equals("1")) {
+    wifi.println("Powering ON");
     controller.turnOn();
-    Serial.println("Power ON");
 
   } else if (a0.equals("OFF") || a0.equals("0")) {
+    wifi.println("Powering OFF");
     controller.turnOff();
-    Serial.println("Power OFF");
+
+  } else if (a0.equals("SLEEP") || a0.equals("Z")) {
+    int sleepTime = getArg(command, 1).toInt();
+    if (sleepTime <= 0) {
+      wifi.println("Invalid sleep time. Please specify a positive number.");
+      return;
+    }
+    controller.sleep(sleepTime);
 
   } else {
     help();
@@ -103,20 +138,20 @@ String getArg(String command, int argIndex) {
 bool newPlant() {}
 
 void listPlants() {
-  Serial.println("\nYOUR PLANTS:");
+  wifi.println("\nYOUR PLANTS:");
   Plant** plants = controller.getPlants();
   for (int i = 0; i < MAX_PLANTS; i++) {
     if (plants[i] != nullptr) {
       String name = plants[i]->getName();
       int id = plants[i]->getId();
-      Serial.println("\t- " + name + " [ID: " + String(id) + "]");
+      wifi.println("\t- " + name + " [ID: " + String(id) + "]");
     }
   }
 }
 
 void statusPlant(int id) {
   String statusString = controller.getPlantStatusString(id);
-  Serial.println(statusString);
+  wifi.println(statusString);
 }
 
 void infoPlant(int id) {
@@ -126,52 +161,58 @@ void infoPlant(int id) {
 void waterPlant(int id) {
   Plant* plant = controller.getPlant(id);
   if (plant == nullptr) {
-    Serial.println("Plant " + String(id) + " not found");
+    wifi.println("Plant " + String(id) + " not found");
     return;
   }
 
-  Serial.println("Watering " + plant->getName() + "...");
+  wifi.println("Watering " + plant->getName() + "...");
   bool ok = plant->water(30);
   if (ok) {
-    Serial.println("Watering completed successfully");
+    wifi.println("Watering completed successfully");
   } else {
-    Serial.println("Failed to water " + plant->getName());
+    wifi.println("Failed to water " + plant->getName());
   }
 }
 
 void status() {
-  Serial.println("\n--- STATUS ---\n");
-  Serial.println(controller.getEnvironmentDataString()+"\n");
-  Serial.println("YOUR PLANTS:");
+  wifi.println("\n--- STATUS ---\n");
+  wifi.println(controller.getEnvironmentDataString()+"\n");
+  wifi.println("YOUR PLANTS:");
   Plant** plants = controller.getPlants();
   for (int i = 0; i < MAX_PLANTS; i++) {
     if (plants[i] != nullptr) {
       String statusString = controller.getPlantStatusString(plants[i]->getId());
-      Serial.println(statusString);
+      wifi.println(statusString);
     }
   }
 }
 
 void help() {
-  Serial.println("\n--- AVAILABLE COMMANDS ---\n");
-  Serial.println("\tINFO - Show local information (battery, uptime, etc.)");
-  Serial.println("\tON - Turn on the system");
-  Serial.println("\tOFF - Turn off the system");
-  Serial.println("\tSTATUS - Show the status of all plants");
+  wifi.println("\n--- AVAILABLE COMMANDS ---\n");
+  wifi.println("\tINFO - Show local information (battery, uptime, etc.)");
+  wifi.println("\tON/OFF - Turn on/off the system");
+  wifi.println("\tSTATUS - Show the status of all plants");
+  wifi.println("\tSLEEP <sec> - Put the system to sleep for a specified number of seconds");
   //Serial.println("");
-  Serial.println("\tPLANT LIST - List all plants");
-  Serial.println("\tPLANT NEW - Create a new plant");
-  Serial.println("\tPLANT REMOVE <id> - Remove plant with the given id");
-  Serial.println("\tPLANT INFO <id> - Get information about a specific plant");
-  Serial.println("\tPLANT STATUS <id> - Get the status of a specific plant");
-  Serial.println(
-      "\tPLANT WATER <id> - Water a specific plant");
+  wifi.println("\tPLANT LIST - List all plants");
+  wifi.println("\tPLANT NEW - Create a new plant");
+  wifi.println("\tPLANT REMOVE <id> - Remove plant with the given id");
+  wifi.println("\tPLANT INFO <id> - Get information about a specific plant");
+  wifi.println("\tPLANT STATUS <id> - Get the status of a specific plant");
+  wifi.println("\tPLANT WATER <id> - Water a specific plant");
 }
 
 void prompt() {
   String s = "\n";
-  s += "Power: ";
+  s += controller.getReadableTimeString();
+  
+  s += " | Power ";
   s += controller.isOn() ? "ON" : "OFF";
+
+  s += " | WiFi ";
+  s += wifi.isConnected() ? "CONNECTED" : "DISCONNECTED";
+
   s += "\n> ";
-  Serial.print(s);
+  wifi.print(s);
+
 }

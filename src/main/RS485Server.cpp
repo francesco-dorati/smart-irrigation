@@ -14,7 +14,9 @@ void RS485Server::stop() {
   pinMode(comm, INPUT);
   digitalWrite(comm, LOW);
   pinMode(rx, INPUT);
+  digitalWrite(rx, LOW);
   pinMode(tx, INPUT);
+  digitalWrite(tx, LOW);
 }
 
 /*
