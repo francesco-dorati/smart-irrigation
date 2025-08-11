@@ -77,7 +77,7 @@ void Controller::turnOff() {
   if (isPowerOn) {
     rs485.stop();
     pinMode(DHT_PIN, INPUT); 
-    digitalWrite(DHT_PIN, LOW);  // Ensure pin is LOW
+    digitalWrite(DHT_PIN, LOW); 
   }
   isPowerOn = false;
 }
@@ -104,9 +104,9 @@ void Controller::sleep(int seconds) {
   esp_sleep_enable_ext0_wakeup(RTC_WAKEUP_PIN, 0); // Wake when pin goes LOW
   esp_sleep_enable_ext1_wakeup((1ULL << BUTTON_WAKEUP_PIN), ESP_EXT1_WAKEUP_ANY_HIGH);
 
-
   Serial.println("Going to sleep for " + String(seconds) + " seconds...");
   delay(1000);
+  
   esp_deep_sleep_start();
 }
 

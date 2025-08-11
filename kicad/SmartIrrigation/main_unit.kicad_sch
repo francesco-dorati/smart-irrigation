@@ -4909,23 +4909,13 @@
 	)
 	(wire
 		(pts
-			(xy 69.85 101.6) (xy 80.01 101.6)
+			(xy 69.85 101.6) (xy 74.93 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "0fe44953-fb62-430b-ae88-2bce4d3e1030")
-	)
-	(wire
-		(pts
-			(xy 69.85 83.82) (xy 71.12 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "11f9d957-0bcb-4534-9976-fa81d29ec97f")
 	)
 	(wire
 		(pts
@@ -5416,6 +5406,16 @@
 			(type default)
 		)
 		(uuid "5c908b11-7178-4cff-bbf6-30bbf6ef9bdc")
+	)
+	(wire
+		(pts
+			(xy 71.12 83.82) (xy 69.85 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e4beecb-6f00-4a59-a091-702afdec5e28")
 	)
 	(wire
 		(pts
@@ -6026,6 +6026,16 @@
 			(type default)
 		)
 		(uuid "c99c26a7-9aed-490f-86ca-708bc0b5fe2a")
+	)
+	(wire
+		(pts
+			(xy 71.12 96.52) (xy 69.85 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb1a5935-ad5a-40ff-9b71-fe3a776bd9f0")
 	)
 	(wire
 		(pts
@@ -6662,7 +6672,7 @@
 			)
 		)
 	)
-	(global_label "NPN BASE - ESP GPIO2"
+	(global_label "LEVEL VCCA - ESP GPIO5"
 		(shape input)
 		(at 151.13 100.33 0)
 		(fields_autoplaced yes)
@@ -6674,7 +6684,7 @@
 		)
 		(uuid "4d5db46c-50a2-4bf3-8985-54fce22e60d2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 177.5194 100.33 0)
+			(at 179.0313 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6992,7 +7002,7 @@
 			)
 		)
 	)
-	(global_label "LEVEL A4 - ESP GPIO5"
+	(global_label "LEVEL A4 - ESP GPIO15"
 		(shape input)
 		(at 143.51 132.08 180)
 		(fields_autoplaced yes)
@@ -7004,7 +7014,7 @@
 		)
 		(uuid "a11bd951-29d7-42e6-8a77-373df2fefe2d")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 118.0278 132.08 0)
+			(at 116.8183 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7124,6 +7134,28 @@
 			)
 		)
 	)
+	(global_label "LEVEL VCCA - ESP GPIO5"
+		(shape input)
+		(at 71.12 83.82 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "afd61988-f5c0-4876-915b-c9f90c3c8b02")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 99.0213 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "RTC SQW - ESP GPIO33"
 		(shape input)
 		(at 43.18 81.28 180)
@@ -7234,9 +7266,9 @@
 			)
 		)
 	)
-	(global_label "LEVEL A4 - ESP GPIO5"
+	(global_label "LEVEL A4 - ESP GPIO15"
 		(shape input)
-		(at 71.12 83.82 0)
+		(at 71.12 96.52 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -7246,7 +7278,7 @@
 		)
 		(uuid "d211b46c-322f-4097-a5ff-63bbc80c1b22")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 96.6022 83.82 0)
+			(at 97.8117 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9583,7 +9615,7 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 80.01 101.6 0)
+		(at 74.93 101.6 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -9591,7 +9623,7 @@
 		(dnp no)
 		(uuid "715a43a7-fe28-4549-8b9a-ff8bda89e7b1")
 		(property "Reference" "#PWR01"
-			(at 80.01 105.41 0)
+			(at 74.93 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9600,7 +9632,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 79.756 97.028 0)
+			(at 79.248 100.33 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9608,7 +9640,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 80.01 101.6 0)
+			(at 74.93 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9617,7 +9649,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 80.01 101.6 0)
+			(at 74.93 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9626,7 +9658,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 80.01 101.6 0)
+			(at 74.93 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
