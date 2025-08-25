@@ -1,22 +1,17 @@
 #include <Arduino.h>
+#include <ArduinoOTA.h>
 
 #include "Controller.h"
 #include "WiFiManager.h"
 
-#include <ArduinoOTA.h>
-
-
-Controller controller;
 WiFiManager wifi("iPhone di Francesco", "grinder420");
+Controller controller(wifi);
 
 void setup() {
   Serial.begin(115200);
-  controller.init();
-  
-  delay(2000);
-  
   wifi.begin();
-
+  delay(2000);
+  controller.init();
   delay(1000);
 
   ArduinoOTA.setHostname("smart-irrigation"); // Optional
@@ -89,8 +84,7 @@ void interpretUserCommand(String command) {
     status();
 
   } else if (a0.equals("INFO") || a0.equals("I")) {
-    // local info (battery, uptime, etc.)
-    return;
+    info();
 
   } else if (a0.equals("ON") || a0.equals("1")) {
     wifi.println("Powering ON");
@@ -135,16 +129,107 @@ String getArg(String command, int argIndex) {
 
 
 // SERIAL DEBUG COMMANDS
-bool newPlant() {}
+void newPlant() {
+  wifi.println("\n\n--- PLANT CREATION ---\n");
 
-void listPlants() {
+  // ID
+  int plantId;
+  wifi.println("\nPlease enter the plant ID: ");
+  while (!wifi.available());
+  String plantIdString = wifi.getCommand();
+  plantId = plantIdString.toInt();
+
+  // NAME
+  String plantName;
+  wifi.println("\nPlease enter the plant name: ");
+  while (!wifi.available());
+  plantName = wifi.getCommand();
+
+  // TYPE (WATER PREFERENCE)
+  WaterPreference waterPreference;
+  int typeCount = sizeof(WaterPreference::allTypes) / sizeof(WaterPreference*);
+  int typeSelection;
+  do {
+    wifi.println("\nPlease choose the plant type:");
+    for (int i = 1; i <= typeCount; i++) {
+      const WaterPreference* type = WaterPreference::allTypes[i-1];
+      wifi.println("\t[" + String(i) + "] " + type->toString() + 
+                   " (Min: " + String((int)type->minHumidity) + "%, Optimal: " + String((int)type->optimalHumidity) + "%)");
+    }
+    wifi.println("\t[0] CUSTOM");
+
+    wifi.println("\nEnter the number corresponding to the plant type: ");
+    while (!wifi.available());
+    String typeSelectionString = wifi.getCommand();
+    typeSelection = typeSelectionString.toInt();
+  } while (typeSelection < 0 || typeSelection > typeCount);
+
+  if (typeSelection == 0) {
+    // CUSTOM type selected
+    // min humidity
+    wifi.println("\nPlease enter the minimum humidity value (in %): ");
+    while (!wifi.available());
+    String minHumidityString = wifi.getCommand();
+    float minHumidity = minHumidityString.toFloat();
+    // optimal humidity
+    wifi.println("\nPlease enter the optimal humidity value (in %): ");
+    while (!wifi.available());
+    String optimalHumidityString = wifi.getCommand();
+    float optimalHumidity = optimalHumidityString.toFloat();
+    // preference creation
+    waterPreference = WaterPreference(minHumidity, optimalHumidity, "CUSTOM");
+  } else {
+    // preference selection
+    waterPreference = *WaterPreference::allTypes[typeSelection - 1];
+  }
+
+  // SAUCER CAPACITY
+  int saucerCapacity;
+  // @TODO SAUCER CAPACITY TEST
+  wifi.println("\nPlease enter the saucer capacity (in ml): ");
+  while (!wifi.available());
+  String saucerCapacityString = wifi.getCommand();
+  saucerCapacity = saucerCapacityString.toInt();
+
+  // PLANT OVERVIEW
+  wifi.println("\n--- PLANT OVERVIEW ---\n");
+  wifi.println("ID: " + String(plantId));
+  wifi.println("Name: " + plantName);
+  wifi.println("Type: " + waterPreference.toString() + 
+               " (Min: " + String((int)waterPreference.minHumidity) + "%, Optimal: " + String((int)waterPreference.optimalHumidity) + "%)");
+  wifi.println("Saucer Capacity: " + String(saucerCapacity) + " ml");
+
+  // CONFIRMATION
+  wifi.println("\nDo you want to proceed with the creation? (y/n)");
+  while (!wifi.available());
+  String confirmation = wifi.getCommand();
+  confirmation.toLowerCase();
+  if (!confirmation.equals("y") && !confirmation.equals("yes")) {
+    wifi.println("\nPlant creation cancelled.");
+    return;
+  }
+
+  // PLANT CREATION
+  bool ok = controller.addPlant(plantId, plantName, waterPreference, saucerCapacity);
+  if (ok) {
+    wifi.println("\nPlant created successfully!");
+  } else {
+    wifi.println("\nFailed to create plant.");
+  }
+}
+
+void info() {
+  wifi.println("\n--- SYSTEM INFO ---\n");
+  wifi.println("SD Card: " + String(controller.getSDCard().getFreeSpace()) + " GB free (" + String(controller.getSDCard().getTotalSpace()) + " GB total)");
+  wifi.println("Current time: " + controller.getReadableTimeString());
+  wifi.println("Battery: -- %");
+  wifi.println("Uptime: -- min");
   wifi.println("\nYOUR PLANTS:");
   Plant** plants = controller.getPlants();
   for (int i = 0; i < MAX_PLANTS; i++) {
     if (plants[i] != nullptr) {
-      String name = plants[i]->getName();
-      int id = plants[i]->getId();
-      wifi.println("\t- " + name + " [ID: " + String(id) + "]");
+      String infoString = controller.getPlantInfoString(plants[i]->getId());
+      wifi.println(infoString);
     }
   }
 }
@@ -155,7 +240,8 @@ void statusPlant(int id) {
 }
 
 void infoPlant(int id) {
-  // local info (humidity preferences, etc.)
+  String infoString = controller.getPlantInfoString(id);
+  wifi.println(infoString);
 }
 
 void waterPlant(int id) {
@@ -202,17 +288,18 @@ void help() {
   wifi.println("\tPLANT WATER <id> - Water a specific plant");
 }
 
-void prompt() {
+void prompt() {  
   String s = "\n";
   s += controller.getReadableTimeString();
   
   s += " | Power ";
   s += controller.isOn() ? "ON" : "OFF";
-
+  
   s += " | WiFi ";
   s += wifi.isConnected() ? "CONNECTED" : "DISCONNECTED";
 
   s += "\n> ";
+
   wifi.print(s);
 
 }

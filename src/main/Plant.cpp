@@ -1,10 +1,31 @@
 #include "Plant.h"
 
-const WaterPreference WaterPreference::SUCCULENT(15, 60);
-const WaterPreference WaterPreference::FERN(55, 85);
-const WaterPreference WaterPreference::HOUSEPLANT(35, 75);
-const WaterPreference WaterPreference::VEGETABLE(45, 80);
-const WaterPreference WaterPreference::MEDITERRANEAN(40, 80);
+WaterPreference::WaterPreference(float minHumidity, float optimalHumidity, String name = "CUSTOM")
+    : minHumidity(minHumidity),
+      optimalHumidity(optimalHumidity),
+      name(name) {}
+
+String WaterPreference::toString() const {
+  return name + "," + String(minHumidity) + "," + String(optimalHumidity);
+}
+
+WaterPreference WaterPreference::fromValues(String name, float minH, float optH) {
+  return WaterPreference(minH, optH, name);
+}
+
+const WaterPreference WaterPreference::SUCCULENT(0.15, 0.40, "SUCCULENT");
+const WaterPreference WaterPreference::FERN(0.55, 0.85, "FERN");
+const WaterPreference WaterPreference::HOUSEPLANT(0.35, 0.65, "HOUSEPLANT");
+const WaterPreference WaterPreference::MEDITERRANEAN(0.40, 0.80, "MEDITERRANEAN");
+const WaterPreference WaterPreference::VEGETABLE(0.35, 0.70, "VEGETABLE");
+
+const WaterPreference* WaterPreference::allTypes[] = {
+    &WaterPreference::SUCCULENT,
+    &WaterPreference::FERN,
+    &WaterPreference::HOUSEPLANT,
+    &WaterPreference::MEDITERRANEAN,
+    &WaterPreference::VEGETABLE
+};
 
 Plant::Plant(RS485Server& server, int id, String name, PlantState state,
              WaterPreference waterPreference, int saucerCapacity)

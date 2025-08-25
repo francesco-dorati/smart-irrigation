@@ -19,23 +19,6 @@ void RS485Server::stop() {
   digitalWrite(tx, LOW);
 }
 
-/*
-bool RS485Server::available() {
-  while (serial.available()) {
-    char c = serial.read();
-    lineBuffer += c;
-    if (c == '\n') {
-      return true;  // We have a full line!
-    }
-  }
-  return false;  // Not a full line yet}
-}
-*/
-/*String RS485Server::receiveResponse() {
-  String command = Serial1.readStringUntil('\n');
-  command.trim();
-  return command;
-}*/
 
 String RS485Server::receiveFrom(int target, bool longTimeout) {
   String response = "";

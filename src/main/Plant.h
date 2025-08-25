@@ -21,7 +21,7 @@ Maintain 50-70%, never below 40%
 Advanced Adjustments
     Seasonal Factor: Reduce watering by 30-50% during dormant months
     Environmental Factor: Increase by 20-40% during hot, dry periods
-    Growth Stage Factor: Increase by 25% during active growing season dv
+    Growth Stage Factor: Increase by 25% during active growing season
 Environmental Thresholds
     Temperature: Monitor 15-30°C range, increase watering frequency above 25°C
     Humidity: Below 40% increases water demand significantly
@@ -32,17 +32,23 @@ Environmental Thresholds
 enum PlantState { ABSORBING, WATERING };
 class WaterPreference {
  public:
-  int minHumidity;
-  int optimalHumidity;
+  float minHumidity;
+  float optimalHumidity;
+  String name;
 
-  WaterPreference(int minHumidity, int optimalHumidity)
-      : minHumidity(minHumidity), optimalHumidity(optimalHumidity) {}
+  WaterPreference(float minHumidity, float optimalHumidity, String name = "CUSTOM");
+
+  String toString() const;
+  static WaterPreference fromValues(String name, float minH, float optH);
 
   static const WaterPreference SUCCULENT;
   static const WaterPreference FERN;
   static const WaterPreference HOUSEPLANT;
   static const WaterPreference MEDITERRANEAN;
   static const WaterPreference VEGETABLE;
+
+  static const WaterPreference* allTypes[];
+
 };
 
 // enum SunlightExposure { INDOOR, NO_SUN, HALF_SUN, FULL_SUN };
@@ -50,8 +56,7 @@ class WaterPreference {
 class Plant {
  public:
   Plant(RS485Server& server, int id, String name, PlantState state,
-        WaterPreference waterPreference,
-        int saucerCapacity);
+        WaterPreference waterPreference, int saucerCapacity);
 
   int getId() const;
   String getName() const;
@@ -65,7 +70,7 @@ class Plant {
 
  private:
   RS485Server& server;
-  int id;    // Unique identifier for the plant
+  int id;       // Unique identifier for the plant
   String name;  // Name of the plant
   int saucerCapacity;
 
